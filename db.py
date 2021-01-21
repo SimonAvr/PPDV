@@ -8,12 +8,10 @@ class IndexedMeasure:
         self.url_id=url_id
     def str_entry(self):
         return json.dumps(self.d)
-
-
-def print_cursor(cursor):
-    result=cursor.fetchall()
-    for x in result:
-        print(x)
+def get_str_result(gen):
+    ret=""
+    for result in gen:
+        ret+=result.fetchall()
 
 
 def insert_mesure(i):
@@ -64,19 +62,22 @@ class DbHandler:
                 {indexed_measure.url_id}, \
                 \'{indexed_measure.str_entry()}\' \
                 );")
-        print('\n')
-        print(q)
-        print('\n')
+     #  print('\n')
+     #  print(q)
+     #  print('\n')
         self.cursor.execute("use stepdb;" )
-        result=self.cursor.execute(q)
+        result=self.cursor.execute(q,multi=True)
         try:
             self.db.commit()
             ret= True
         except MySQLdb.IntegrityError:
+            print("IntegrityError")
             ret=False
-        finally:
-            self.cursor.close()
-            return ret,result
+#       finally:
+#           self.cursor.close()
+#           print(f"finally { result}"
+#       print(f"End result {result}")
+        return ret,""
 
 
 
@@ -93,7 +94,7 @@ class DbHandler:
         ret=[]
         for rr in r:
             jj,ts=rr
-            d=json.loads(jj)
+            d=json.loads(jj) if patient_id is not None else dict()
             d['ts']=ts
             ret.append(d)
         self.cursor.close()

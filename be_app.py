@@ -19,8 +19,9 @@ def add_patient(p_id):
 def post_measure(p_id):
     # Insers measure json to db
     #in body of request should be json like one posted on monitor ^
-     print(request.json)
+#    print(request.json)
      success,resp=dbh.insert_measure(IndexedMeasure(request.json,p_id))
+#    print(resp)
      return resp, 200 if(success) else 422
 
 
