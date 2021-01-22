@@ -1,6 +1,6 @@
 from flask import Flask, escape, request,jsonify, json
 from db import DbHandler,IndexedMeasure
-from recorder import fetch_data()
+from recorder import fetch_data
 
 dbh=DbHandler()
 

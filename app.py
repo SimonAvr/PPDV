@@ -36,6 +36,8 @@ nav_menu= dbc.NavbarSimple(
                 dbc.DropdownMenuItem("Pacjent 1", header=True),
                 dbc.DropdownMenuItem("Pacjent 2", href="/page-a"),
                 dbc.DropdownMenuItem("Pacjent 3", href="/page-b"),
+                dbc.DropdownMenuItem("Pacjent 4", href="/page-b"),
+                dbc.DropdownMenuItem("Pacjent 5", href="/page-b"),
             ],
             nav=True,
             in_navbar=True,
