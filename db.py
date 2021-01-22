@@ -103,7 +103,6 @@ class DbHandler:
         ret=[]
         for rr in r:
             jj,ts=rr
-           #jj=jj.replace('\"','\'')
            #jj=jj.replace('false','False')
            #jj=jj.replace(' ','')
            #jj=jj.replace('\t','')
