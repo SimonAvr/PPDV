@@ -12,7 +12,7 @@ import requests
 from utils import getTrace
 
 import plotly.graph_objs as go
-url1 = 'http://tesla.iem.pw.edu.pl:9080/v2/monitor/1'
+url1 = 'http://127.0.0.1:5000/be/playback'
 foot = ['left foot front', 'left foot middle', 'left foot back',
         'right foot front', 'right foot middle', 'right foot back']
 x = []

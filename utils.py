@@ -10,3 +10,7 @@ def getTrace(data):
     for t in trace:
         res.append(t['value'])    
     return res
+
+def deser_measure(s):
+    for l in s:
+        print(s)

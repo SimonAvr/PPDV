@@ -8,30 +8,37 @@ class IndexedMeasure:
         self.url_id=url_id
     def str_entry(self):
         return json.dumps(self.d)
-def get_str_result(gen):
+def get_str_result(cursor):
     ret=""
-    for result in gen:
-        ret+=result.fetchall()
+    for r in cursor.fetchall():
+        ret+=str(r)
+    return ret
 
 
-def insert_mesure(i):
-    s=fetch_data(i)["trace"]["sensors"]
-    d=dict()
-    for ss in s:
-        for s3 in ss:
-            print(s3)
+#def insert_mesure(i):
+#    s=fetch_data(i)["trace"]["sensors"]
+#    d=dict()
+#    for ss in s:
+#        for s3 in ss:
+#            print(s3)
 
 class DbHandler:
     def __init__(self):
+       self.connect()
+
+          # for s3 in ss:
+          #     print(s3)
+
+    def connect(self):
         self.db=mysql.connector.connect(
           host="localhost",
           user="user",
           password="1234"
         )
         self.cursor=self.db.cursor()
-
-          # for s3 in ss:
-          #     print(s3)
+    def close(self):
+        self.cursor.close()
+        self.db.close()
 
 
     def init_patient(self,indexed_measure ):
@@ -51,12 +58,11 @@ class DbHandler:
             ret= True
         except MySQLdb.IntegrityError:
             ret=False
-        finally:
-            self.cursor.close()
-            return ret,result
+        return ret,result
 
 
     def insert_measure(self,indexed_measure ):
+        self.connect()
         q=(f"insert into measure (patient_id,entry)\
                 values( \
                 {indexed_measure.url_id}, \
@@ -66,7 +72,7 @@ class DbHandler:
      #  print(q)
      #  print('\n')
         self.cursor.execute("use stepdb;" )
-        result=self.cursor.execute(q,multi=True)
+        self.cursor.execute(q)
         try:
             self.db.commit()
             ret= True
@@ -74,14 +80,16 @@ class DbHandler:
             print("IntegrityError")
             ret=False
 #       finally:
-#           self.cursor.close()
 #           print(f"finally { result}"
 #       print(f"End result {result}")
+        self.cursor.close()
+        self.db.close()
         return ret,""
 
 
 
     def get_measures(self,patient_id,from_time,to_time):
+        self.connect()
         self.cursor.execute("use stepdb;")
         q=f"select entry, ts from measure \
                 where \
@@ -91,13 +99,21 @@ class DbHandler:
         print(q)
         self.cursor.execute(q)
         r=self.cursor.fetchall()
+#       print(r)
         ret=[]
         for rr in r:
             jj,ts=rr
-            d=json.loads(jj) if patient_id is not None else dict()
-            d['ts']=ts
+           #jj=jj.replace('\"','\'')
+           #jj=jj.replace('false','False')
+           #jj=jj.replace(' ','')
+           #jj=jj.replace('\t','')
+            jj=jj[1:-1]
+            print('\n')
+            print(jj)
+            print('\n')
+            d=json.loads(jj)
             ret.append(d)
-        self.cursor.close()
+        self.close()
         return ret
 
 
