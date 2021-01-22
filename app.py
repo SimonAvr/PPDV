@@ -37,7 +37,7 @@ nav_menu= dbc.NavbarSimple(
                 dbc.DropdownMenuItem("Pacjent 2", href="/page-a"),
                 dbc.DropdownMenuItem("Pacjent 3", href="/page-b"),
                 dbc.DropdownMenuItem("Pacjent 4", href="/page-b"),
-                dbc.DropdownMenuItem("Pacjent 5", href="/page-b"),
+                dbc.DropdownMenuItem("Pacjent 5", href="/page-c"),
             ],
             nav=True,
             in_navbar=True,
@@ -222,7 +222,11 @@ def update_graph_bar(self):
     ))
 
     return radar
-
+@app.callback(
+    dash.dependencies.Output('dd-output-container', 'children'),
+    [dash.dependencies.Input('demo-dropdown', 'value')])
+def update_output(value):
+    return 'You have selected "{}"'.format(value)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
